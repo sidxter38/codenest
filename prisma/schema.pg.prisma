@@ -1,0 +1,406 @@
+// CodeNest — Prisma Schema
+// Compatible with SQLite (zero-config dev) & PostgreSQL (Neon / Production)
+// Required models: User, VerificationToken (OTP), Session, Project, ProjectFile,
+// Workspace, WorkspaceMember, WorkspaceDocument, Review, ReviewComment, ReviewReply,
+// Version, Execution, Commit, Invitation, Notification, Activity.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator backendClient {
+  provider = "prisma-client-js"
+  output   = "../backend/node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String   @id @default(cuid())
+  name           String
+  username       String   @unique
+  email          String   @unique
+  passwordHash   String
+  emailVerified  Boolean  @default(false)
+  avatarInitials String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  sessions            Session[]
+  verificationTokens  VerificationToken[]
+  passwordResets      PasswordReset[]
+  projects            Project[]           @relation("ProjectOwner")
+  projectMemberships  ProjectMember[]
+  workspacesOwned     Workspace[]         @relation("WorkspaceOwner")
+  workspaceMembers    WorkspaceMember[]
+  sentInvitations     Invitation[]        @relation("InvitedBy")
+  receivedInvitations Invitation[]        @relation("InvitedUser")
+  reviewsCreated      Review[]            @relation("ReviewCreator")
+  reviewsAssigned     Review[]            @relation("ReviewAssignee")
+  comments            ReviewComment[]
+  commentReplies      ReviewReply[]
+  aiFindings          AIFinding[]
+  commits             Commit[]
+  versions            Version[]
+  executions          Execution[]
+  notifications       Notification[]
+  activities          Activity[]
+
+  @@index([email])
+  @@index([username])
+}
+
+model VerificationToken {
+  id        String   @id @default(cuid())
+  userId    String
+  otpHash   String
+  type      String   @default("EMAIL_VERIFICATION")
+  attempts  Int      @default(0)
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([type])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
+}
+
+model PasswordReset {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  language    String   @default("JavaScript")
+  visibility  String   @default("private")
+  ownerId     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  owner       User?           @relation("ProjectOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  members     ProjectMember[]
+  invitations Invitation[]
+  files       ProjectFile[]
+  reviews     Review[]
+  commits     Commit[]
+  versions    Version[]
+  workspaces  Workspace[]
+  activities  Activity[]
+
+  @@index([createdAt])
+  @@index([ownerId])
+}
+
+model ProjectMember {
+  id        String   @id @default(cuid())
+  projectId String
+  userId    String
+  role      String   @default("Developer")
+  joinedAt  DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
+  @@index([projectId])
+  @@index([userId])
+}
+
+model Workspace {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  numericCode String
+  name        String
+  description String?
+  ownerId     String
+  projectId   String?
+  language    String   @default("javascript")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  owner     User                @relation("WorkspaceOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  project   Project?            @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  members   WorkspaceMember[]
+  documents WorkspaceDocument[]
+
+  @@index([code])
+  @@index([numericCode])
+  @@index([ownerId])
+}
+
+model WorkspaceMember {
+  id          String   @id @default(cuid())
+  workspaceId String
+  userId      String
+  role        String   @default("Collaborator")
+  joinedAt    DateTime @default(now())
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, userId])
+  @@index([workspaceId])
+  @@index([userId])
+}
+
+model WorkspaceDocument {
+  id          String   @id @default(cuid())
+  workspaceId String
+  name        String
+  path        String
+  content     String   @default("")
+  language    String   @default("javascript")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, path])
+  @@index([workspaceId])
+}
+
+model ProjectFile {
+  id         String   @id @default(cuid())
+  projectId  String
+  name       String
+  path       String
+  content    String   @default("")
+  language   String   @default("javascript")
+  isFolder   Boolean  @default(false)
+  parentPath String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  project  Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  versions FileVersion[]
+  comments ReviewComment[]
+
+  @@unique([projectId, path])
+  @@index([projectId])
+}
+
+model FileVersion {
+  id        String   @id @default(cuid())
+  fileId    String
+  content   String
+  commitId  String?
+  createdAt DateTime @default(now())
+
+  file   ProjectFile @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  commit Commit?     @relation(fields: [commitId], references: [id])
+
+  @@index([fileId])
+}
+
+model Version {
+  id         String   @id @default(cuid())
+  projectId  String
+  userId     String
+  versionNum Int
+  summary    String
+  snapshot   String
+  createdAt  DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([userId])
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  projectId   String
+  creatorId   String
+  assigneeId  String?
+  title       String
+  description String?
+  status      String   @default("draft")
+  fileIds     String   @default("[]")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  project    Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  creator    User            @relation("ReviewCreator", fields: [creatorId], references: [id])
+  assignee   User?           @relation("ReviewAssignee", fields: [assigneeId], references: [id])
+  comments   ReviewComment[]
+  aiFindings AIFinding[]
+
+  @@index([projectId])
+  @@index([creatorId])
+  @@index([status])
+}
+
+model ReviewComment {
+  id        String   @id @default(cuid())
+  reviewId  String
+  fileId    String?
+  authorId  String
+  parentId  String?
+  line      Int?
+  body      String
+  resolved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  review  Review        @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  file    ProjectFile?  @relation(fields: [fileId], references: [id])
+  author  User          @relation(fields: [authorId], references: [id])
+  replies ReviewReply[]
+
+  @@index([reviewId])
+  @@index([fileId])
+  @@index([authorId])
+}
+
+model ReviewReply {
+  id        String   @id @default(cuid())
+  commentId String
+  authorId  String
+  body      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  comment ReviewComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  author  User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([commentId])
+  @@index([authorId])
+}
+
+model AIFinding {
+  id          String   @id @default(cuid())
+  reviewId    String
+  requestedBy String
+  file        String
+  line        Int?
+  severity    String
+  category    String
+  title       String
+  description String
+  suggestion  String?
+  dismissed   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  review          Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  requestedByUser User   @relation(fields: [requestedBy], references: [id])
+
+  @@index([reviewId])
+}
+
+model Commit {
+  id        String   @id @default(cuid())
+  projectId String
+  authorId  String
+  message   String
+  fileIds   String   @default("[]")
+  createdAt DateTime @default(now())
+
+  project      Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  author       User          @relation(fields: [authorId], references: [id])
+  fileVersions FileVersion[]
+
+  @@index([projectId])
+  @@index([authorId])
+}
+
+model Execution {
+  id            String   @id @default(cuid())
+  userId        String?
+  language      String
+  status        String
+  exitCode      Int      @default(0)
+  executionTime String?
+  memoryUsed    String?
+  stdout        String?
+  stderr        String?
+  compileOutput String?
+  createdAt     DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model Invitation {
+  id            String   @id @default(cuid())
+  projectId     String
+  invitedById   String
+  invitedEmail  String
+  invitedUserId String?
+  role          String   @default("Developer")
+  status        String   @default("pending")
+  token         String   @unique
+  expiresAt     DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  invitedBy   User    @relation("InvitedBy", fields: [invitedById], references: [id])
+  invitedUser User?   @relation("InvitedUser", fields: [invitedUserId], references: [id])
+
+  @@index([token])
+  @@index([projectId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  title     String
+  body      String
+  data      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([read])
+}
+
+model Activity {
+  id        String   @id @default(cuid())
+  projectId String?
+  userId    String
+  type      String
+  summary   String
+  data      String?
+  createdAt DateTime @default(now())
+
+  project Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([userId])
+}
+

@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: codenest-backend
+    runtime: node
+    region: oregon  # Change to 'singapore' if you want Asia-Pacific
+    rootDir: backend
+    buildCommand: npm install && npm run render:build
+    startCommand: npm run render:start
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "10000"
+      - key: DATABASE_PROVIDER
+        value: postgresql
+      - key: DATABASE_URL
+        sync: false   # You must set this manually in Render dashboard
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CLIENT_URL
+        sync: false   # Set this to your Vercel URL after deploying frontend
+      - key: GEMINI_API_KEY
+        sync: false   # Set this in Render dashboard
+      - key: GEMINI_MODEL
+        value: gemini-1.5-flash
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false   # Set in Render dashboard
+      - key: SMTP_PASSWORD
+        sync: false   # Set in Render dashboard
+      - key: SMTP_FROM
+        sync: false   # Set in Render dashboard
+      - key: JUDGE0_URL
+        sync: false   # Optional: set if you have Judge0 on RapidAPI
+      - key: JUDGE0_API_KEY
+        sync: false   # Optional

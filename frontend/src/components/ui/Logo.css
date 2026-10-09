@@ -1,0 +1,32 @@
+@keyframes nestContinuousFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.codenest-animated-nest {
+  background: linear-gradient(
+    90deg,
+    #FFFFFF 0%,
+    #A1A1AA 25%,
+    #09090B 50%,
+    #71717A 75%,
+    #FFFFFF 100%
+  ) !important;
+  background-size: 200% 100% !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  animation: nestContinuousFlow 3s linear infinite !important;
+  display: inline-block;
+  font-weight: 800;
+  letter-spacing: inherit;
+  text-shadow: none !important;
+  filter: none !important;
+  -webkit-text-stroke: 0 !important;
+}
+

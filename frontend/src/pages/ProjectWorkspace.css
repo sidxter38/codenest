@@ -1,0 +1,1420 @@
+/* ================================================================
+   Project Workspace / IDE Styles
+   ================================================================ */
+
+.ide {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--bg);
+  overflow: hidden;
+  font-family: var(--font-ui);
+}
+
+.ide-loading, .ide-error {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.ide-error { color: var(--error); }
+.ide-error h2 { color: var(--text); font-size: 18px; }
+
+/* ── IDE Header ───────────────────────────────────────── */
+.ide-header {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 16px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.ide-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.ide-wordmark {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary);
+  text-decoration: none;
+  letter-spacing: -0.3px;
+}
+
+.ide-divider {
+  width: 1px;
+  height: 18px;
+  background: var(--border);
+}
+
+.ide-project-name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition);
+}
+.ide-project-name:hover { background: var(--elevated); color: var(--text); }
+
+.ide-branch {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: var(--font-code);
+}
+
+.ide-header-center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.ide-active-file {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-code);
+  font-size: 12px;
+  color: var(--text-muted);
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ide-dirty-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--warning);
+  flex-shrink: 0;
+}
+
+.ide-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.ide-save-state {
+  font-size: 12px;
+  color: var(--success);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.ide-save-state.unsaved { color: var(--text-muted); }
+
+.ide-run-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: var(--success);
+  color: #000;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.ide-run-btn:hover { background: #2DBF51; }
+.ide-run-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.ide-run-btn.running { background: var(--elevated); color: var(--text-muted); }
+
+/* ── IDE Body ─────────────────────────────────────────── */
+.ide-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ── File Explorer ────────────────────────────────────── */
+.ide-explorer {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
+  min-width: 160px;
+  max-width: 300px;
+}
+
+.ide-explorer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.ide-file-tree {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.ide-explorer-empty {
+  padding: 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ide-explorer-empty p { font-size: 12px; color: var(--text-muted); }
+
+.file-tree-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+  padding: 4px 12px;
+  text-align: left;
+  transition: background var(--transition);
+  position: relative;
+  min-height: 24px;
+}
+.file-tree-item:hover { background: var(--elevated); color: var(--text); }
+.file-tree-item.active { background: var(--primary-dim); color: var(--primary); }
+
+.file-tree-spacer { width: 13px; flex-shrink: 0; }
+.file-tree-folder-icon { color: var(--warning); flex-shrink: 0; }
+.file-tree-file-icon { color: var(--text-subtle); flex-shrink: 0; }
+
+.file-tree-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.file-modified-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--warning);
+  flex-shrink: 0;
+}
+
+.file-tree-delete-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-subtle);
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.file-tree-item:hover .file-tree-delete-btn { display: flex; }
+.file-tree-delete-btn:hover { background: var(--error-dim); color: var(--error); }
+
+.ide-explorer-bottom {
+  border-top: 1px solid var(--border);
+  padding: 6px 4px;
+  flex-shrink: 0;
+}
+
+.ide-sidebar-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition);
+  font-family: var(--font-ui);
+}
+.ide-sidebar-btn:hover { background: var(--elevated); color: var(--text); }
+.ide-sidebar-btn b {
+  background: var(--error);
+  color: white;
+  font-size: 9px;
+  padding: 1px 4px;
+  border-radius: 100px;
+  margin-left: auto;
+}
+
+/* ── Editor Area ──────────────────────────────────────── */
+.ide-editor-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.ide-tabs {
+  display: flex;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  flex-shrink: 0;
+  scrollbar-width: none;
+}
+.ide-tabs::-webkit-scrollbar { display: none; }
+
+.ide-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 12px;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: var(--font-ui);
+  transition: all var(--transition);
+}
+.ide-tab:hover { color: var(--text); background: var(--elevated); }
+.ide-tab.active { color: var(--text); border-bottom-color: var(--primary); background: var(--bg); }
+
+.ide-tab-dirty {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--warning);
+}
+
+.ide-tab-close {
+  display: flex;
+  align-items: center;
+  color: var(--text-subtle);
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 1px;
+}
+.ide-tab-close:hover { background: var(--border); color: var(--text); }
+
+.ide-monaco {
+  flex: 1;
+  overflow: hidden;
+  background: #1E1E1E; /* Monaco dark bg */
+}
+
+.ide-no-file {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text-muted);
+  background: #1E1E1E;
+  height: 100%;
+}
+.ide-no-file h3 { color: var(--text); font-size: 16px; }
+.ide-no-file p  { font-size: 13px; }
+
+.ide-collab-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 12px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.ide-collab-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--success);
+}
+.ide-collab-status i {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+}
+
+.ide-collab-users {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ── Right Panel ──────────────────────────────────────── */
+.ide-right-panel {
+  width: 280px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ide-right-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.ide-right-tab {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 9px 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: var(--font-ui);
+  white-space: nowrap;
+}
+.ide-right-tab:hover { color: var(--text); }
+.ide-right-tab.active { color: var(--text); border-bottom-color: var(--primary); }
+
+/* Panel sections */
+.ide-panel-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  padding: 8px 12px 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ide-panel-section-label span {
+  background: var(--elevated);
+  color: var(--text-subtle);
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 100px;
+}
+
+.ide-panel-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 16px;
+  text-align: center;
+}
+.ide-panel-empty p { font-size: 12px; color: var(--text-muted); }
+
+/* ── Review Panel ─────────────────────────────────────── */
+.ide-review-panel {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.ide-create-review {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.ide-reviews-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.ide-review-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  background: none;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  text-align: left;
+  margin: 4px 0;
+  font-family: var(--font-ui);
+  transition: border-color var(--transition), background var(--transition);
+}
+.ide-review-item:hover { border-color: var(--primary); background: var(--primary-dim); }
+
+.ide-review-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ide-review-time { font-size: 11px; color: var(--text-subtle); }
+.ide-review-item b { font-size: 13px; font-weight: 500; color: var(--text); }
+.ide-review-item span { font-size: 11px; color: var(--text-muted); }
+
+/* Active review */
+.ide-active-review {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.ide-active-review-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.ide-review-title {
+  padding: 10px 12px 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ide-review-desc {
+  padding: 0 12px 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.ide-review-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.ide-review-actions {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+}
+
+.ide-comments {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.ide-no-comments {
+  padding: 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.ide-comment {
+  display: flex;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  margin-bottom: 4px;
+}
+.ide-comment.resolved { opacity: 0.6; }
+
+.ide-comment-body { flex: 1; min-width: 0; }
+
+.ide-comment-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+.ide-comment-header b { font-size: 12px; color: var(--text); }
+.ide-comment-header span { font-size: 11px; color: var(--text-muted); }
+
+.ide-comment-line {
+  font-family: var(--font-code);
+  font-size: 10px;
+  color: var(--primary);
+  background: var(--primary-dim);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.ide-comment-body p { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+.ide-comment-resolved {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  color: var(--success);
+  margin-top: 4px;
+}
+
+.ide-comment-form {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+/* ── AI Panel ─────────────────────────────────────────── */
+.ide-ai-panel {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+}
+
+.ide-ai-desc {
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.ide-ai-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 4px 12px 8px;
+}
+
+.ide-ai-cat-btn {
+  padding: 4px 10px;
+  font-size: 11px;
+  border-radius: 100px;
+  background: var(--elevated);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: var(--font-ui);
+  transition: all var(--transition);
+  text-transform: capitalize;
+}
+.ide-ai-cat-btn.selected {
+  background: var(--primary-dim);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.ide-ai-cat-btn:hover { border-color: var(--primary); color: var(--text); }
+
+.ide-ai-run-btn {
+  margin: 0 12px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px;
+  background: var(--primary-dim);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-md);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  transition: all var(--transition);
+}
+.ide-ai-run-btn:hover { background: var(--primary); color: white; }
+.ide-ai-run-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.ide-ai-note {
+  padding: 4px 12px;
+  font-size: 11px;
+  color: var(--text-subtle);
+}
+
+.ide-ai-summary {
+  margin: 4px 12px;
+  padding: 8px 10px;
+  background: var(--elevated);
+  border-radius: var(--radius-md);
+  font-size: 12px;
+}
+.ide-ai-summary b { display: block; color: var(--text); margin-bottom: 4px; font-size: 11px; }
+.ide-ai-summary p { color: var(--text-muted); line-height: 1.5; }
+
+.ide-ai-findings { padding: 4px; }
+
+.ide-finding {
+  padding: 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  margin-bottom: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.ide-finding-high, .ide-finding-critical { border-left: 3px solid var(--error); }
+.ide-finding-medium { border-left: 3px solid var(--warning); }
+.ide-finding-low { border-left: 3px solid var(--text-subtle); }
+
+.ide-finding-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ide-finding-cat {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+
+.ide-finding-file {
+  font-family: var(--font-code);
+  font-size: 11px;
+  color: var(--text-subtle);
+}
+
+.ide-finding h4 { font-size: 12px; font-weight: 600; color: var(--text); }
+.ide-finding p  { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+.ide-finding-suggestion {
+  background: var(--elevated);
+  border-radius: var(--radius-sm);
+  padding: 6px 8px;
+}
+.ide-finding-suggestion b { display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 4px; }
+.ide-finding-suggestion p { font-size: 11px; color: var(--text-muted); }
+
+/* ── Members Panel ────────────────────────────────────── */
+.ide-members-panel {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.ide-member {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  transition: background var(--transition);
+}
+.ide-member:hover { background: var(--elevated); }
+
+.ide-member-info { flex: 1; min-width: 0; }
+.ide-member-info b { display: block; font-size: 13px; font-weight: 500; color: var(--text); }
+.ide-member-info span { font-size: 11px; color: var(--text-muted); }
+
+/* ── Commits Panel ────────────────────────────────────── */
+.ide-commits-panel {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.ide-commit-form {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.ide-commit-list { flex: 1; overflow-y: auto; padding: 4px; }
+
+.ide-no-commits {
+  padding: 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.ide-commit {
+  display: flex;
+  gap: 10px;
+  padding: 8px 10px;
+  align-items: flex-start;
+}
+
+.ide-commit-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.ide-commit-info { flex: 1; min-width: 0; }
+.ide-commit-info b { display: block; font-size: 12px; color: var(--text); overflow: hidden; text-overflow: ellipsis; }
+.ide-commit-info span { display: block; font-size: 11px; color: var(--text-muted); }
+
+/* ── Bottom Panel (Expandable Output & Terminal) ──────── */
+.ide-panel-resizer-row {
+  height: 5px;
+  background: var(--border);
+  cursor: row-resize;
+  position: relative;
+  z-index: 30;
+  transition: background 0.15s ease;
+  user-select: none;
+  flex-shrink: 0;
+  margin-top: -3px;
+}
+
+.ide-panel-resizer-row:hover,
+.ide-panel-resizer-row.active {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.ide-panel-resizer-row::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  cursor: row-resize;
+}
+
+.ide-bottom {
+  min-height: 100px;
+  max-height: 85vh;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ide-bottom.dragging {
+  user-select: none !important;
+}
+
+.ide-bottom.dragging * {
+  user-select: none !important;
+}
+
+.ide-bottom-tabs {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding: 0 8px;
+  flex-shrink: 0;
+  height: 32px;
+}
+
+.ide-bottom-tab {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 12px;
+  height: 32px;
+  font-size: 12px;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.ide-bottom-tab:hover { color: var(--text); }
+.ide-bottom-tab.active { color: var(--text); border-bottom-color: var(--primary); }
+.ide-bottom-tab b {
+  background: var(--error);
+  color: white;
+  font-size: 9px;
+  padding: 1px 4px;
+  border-radius: 100px;
+}
+
+.ide-bottom-spacer { flex: 1; }
+
+.ide-bottom-content { flex: 1; overflow: hidden; }
+
+.ide-terminal-output {
+  font-family: var(--font-code);
+  font-size: 12px;
+  color: var(--text);
+  padding: 10px 16px;
+  height: 100%;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  line-height: 1.6;
+  background: #1a1e26;
+}
+
+.ide-problems {
+  height: 100%;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.ide-analyzing {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.ide-no-problems {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.ide-problem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+  transition: background var(--transition);
+  cursor: pointer;
+}
+.ide-problem:hover { background: var(--elevated); }
+.ide-problem-error { color: var(--error); }
+.ide-problem-warning { color: var(--warning); }
+.ide-problem-info { color: var(--primary); }
+
+.ide-problem-file {
+  font-family: var(--font-code);
+  font-size: 11px;
+  color: var(--text-subtle);
+}
+
+/* ── Status Bar ───────────────────────────────────────── */
+.ide-status-bar {
+  height: 22px;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 8px;
+  flex-shrink: 0;
+}
+
+.ide-status-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.85);
+  padding: 0 10px;
+  height: 22px;
+  border-right: 1px solid rgba(255,255,255,0.2);
+  white-space: nowrap;
+}
+
+.ide-status-conn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.85);
+  margin-left: auto;
+}
+.ide-status-conn i {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: white;
+}
+
+/* ── Code / Diff Mode Toggle ────────────────────────── */
+.ide-tabs-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.ide-tabs-bar .ide-tabs {
+  border-bottom: none;
+}
+
+.ide-view-toggle {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 0 10px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  margin-right: 10px;
+  border: 1px solid var(--border);
+}
+
+.ide-view-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.ide-view-btn:hover {
+  color: var(--text);
+}
+
+.ide-view-btn.active {
+  background: var(--primary-dim);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* ── Finding Actions & Code Diff Preview ────────────── */
+.ide-finding-dismiss-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--text-subtle);
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+
+.ide-finding-dismiss-btn:hover {
+  background: var(--elevated);
+  color: var(--error);
+}
+
+.ide-finding-code-diff {
+  margin-top: 6px;
+  padding: 8px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  font-family: var(--font-code);
+  font-size: 11px;
+}
+
+.ide-code-current {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.1);
+  padding: 3px 6px;
+  border-radius: 3px;
+  margin: 0 0 4px 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.ide-code-suggested {
+  color: #4ade80;
+  background: rgba(34, 197, 94, 0.1);
+  padding: 3px 6px;
+  border-radius: 3px;
+  margin: 0 0 8px 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.ide-finding-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.btn-xs {
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Structured Execution Meta Bar ──────────────────── */
+.ide-output-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.ide-exec-meta-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: rgba(15, 23, 42, 0.6);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+
+.ide-meta-badge {
+  font-family: var(--font-code);
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.2px;
+}
+
+.ide-meta-badge.badge-ok {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.ide-meta-badge.badge-err {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.ide-meta-badge.badge-neutral {
+  background: var(--elevated);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+/* AI unavailable fallback notice */
+.ide-ai-unavailable {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 10px;
+  background: rgba(240, 184, 74, 0.07);
+  border: 1px solid rgba(240, 184, 74, 0.18);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  color: var(--warning);
+  margin-bottom: 6px;
+}
+
+/* HTML/CSS preview iframe in output panel */
+.ide-preview-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #fff;
+  display: block;
+}
+
+/* ── Top Header Controls & Buttons ────────────────────── */
+.ide-autosave-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.ide-autosave-toggle.active {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #22c55e;
+}
+.ide-autosave-toggle:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.ide-collab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: #ffffff;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.ide-collab-btn:hover {
+  background: var(--border);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.ide-collab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #22c55e;
+  color: #09090b;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+}
+
+/* ── Monaco Remote Cursor Widgets ─────────────────────── */
+.monaco-remote-cursor-container {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1000;
+}
+.monaco-remote-cursor-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 18px;
+  pointer-events: none;
+  animation: cursor-pulse 1.2s infinite alternate;
+}
+.monaco-remote-cursor-tag {
+  position: absolute;
+  top: -16px;
+  left: 0;
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 3px;
+  color: #09090b;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  transform: translateY(-2px);
+}
+@keyframes cursor-pulse {
+  0% { opacity: 1; }
+  100% { opacity: 0.35; }
+}
+
+/* ── IDE Status Bar ───────────────────────────────────── */
+.ide-status-bar {
+  height: 26px;
+  background: #09090b;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-code);
+  flex-shrink: 0;
+  user-select: none;
+}
+.ide-status-bar-left, .ide-status-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.ide-status-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.ide-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+/* ── Error Diagnostics & Quick AI Action ──────────────── */
+.terminal-error-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: var(--radius-sm);
+  margin: 8px 12px;
+  font-size: 12px;
+  color: #f87171;
+}
+.ide-error-diagnosis-card {
+  margin: 12px 14px;
+  padding: 14px 16px;
+  background: #141417;
+  border: 1px solid #3f3f46;
+  border-left: 3px solid #ef4444;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ide-error-diagnosis-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+}
+.ide-error-diagnosis-summary {
+  font-size: 13px;
+  color: #fca5a5;
+  line-height: 1.5;
+}
+.ide-error-diagnosis-approach {
+  font-size: 12px;
+  color: #a1a1aa;
+  line-height: 1.5;
+  background: #1c1c20;
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+.ide-error-diagnosis-code {
+  font-family: var(--font-code);
+  font-size: 12px;
+  background: #09090b;
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  border-radius: 4px;
+  color: #ffffff;
+  white-space: pre-wrap;
+}
+
+/* ── Collab Modal ─────────────────────────────────────── */
+.collab-link-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #09090b;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+}
+.collab-link-text {
+  flex: 1;
+  font-family: var(--font-code);
+  font-size: 12px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.collab-user-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 13px;
+}
+.collab-user-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.collab-user-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* ── Interactive Terminal Input Styles ───────────────── */
+.terminal-waiting-input-card {
+  margin: 10px 14px;
+  padding: 12px 14px;
+  background: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.35);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.terminal-waiting-input-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #fef08a;
+  font-family: var(--font-ui);
+}
+.terminal-waiting-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.ide-terminal-prompt-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: #0d0d10;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.ide-terminal-prompt-prefix {
+  font-family: var(--font-code);
+  font-size: 13px;
+  font-weight: 700;
+  color: #22c55e;
+}
+.ide-terminal-input-field {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-family: var(--font-code);
+  font-size: 12px;
+  outline: none;
+}
+.ide-terminal-input-field::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+  font-style: italic;
+}
+
