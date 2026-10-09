@@ -35,7 +35,8 @@ const registerValidation = [
 async function handleRegister(req: Request, res: Response): Promise<void> {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    res.status(400).json({ errors: errors.array() })
+    const firstError = errors.array()[0]?.msg || 'Validation failed'
+    res.status(400).json({ error: firstError, errors: errors.array() })
     return
   }
 

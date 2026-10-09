@@ -70,8 +70,10 @@ export default function Register() {
       localStorage.setItem('pendingVerifyEmail', form.email)
       navigate(`/verify-email?email=${encodeURIComponent(form.email)}`)
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { error?: string } } }
-      setError(error.response?.data?.error || 'Registration failed. Please try again.')
+      const error = err as { response?: { data?: { error?: string; errors?: Array<{ msg?: string }> } }; message?: string }
+      const serverMsg = error.response?.data?.error || error.response?.data?.errors?.[0]?.msg
+      const networkMsg = error.message && error.message.includes('Network Error') ? 'Cannot connect to backend server. Please check your internet or try again.' : undefined
+      setError(serverMsg || networkMsg || 'Registration failed. Please try again.')
     } finally {
       setLoading(false)
     }
