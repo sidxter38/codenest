@@ -4,7 +4,7 @@ services:
     runtime: node
     region: oregon  # Change to 'singapore' if you want Asia-Pacific
     rootDir: backend
-    buildCommand: npm install && npm run render:build
+    buildCommand: npm install --include=dev && npm run render:build
     startCommand: npm run render:start
     plan: free
     envVars:
