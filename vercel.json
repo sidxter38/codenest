@@ -3,8 +3,18 @@
   "framework": null,
   "buildCommand": "npm --prefix frontend install && npm --prefix frontend run build",
   "outputDirectory": "frontend/dist",
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/index.html" }
+  "rewrites": [
+    {
+      "source": "/api/:match*",
+      "destination": "https://codenest-backend.onrender.com/api/:match*"
+    },
+    {
+      "source": "/socket.io/:match*",
+      "destination": "https://codenest-backend.onrender.com/socket.io/:match*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
   ]
 }
