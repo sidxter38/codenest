@@ -28,7 +28,16 @@ export function setupSocketServer(httpServer: HttpServer): Server {
 
   const io = new Server(httpServer, {
     cors: {
-      origin: allowedOrigins,
+      origin: (origin, callback) => {
+        if (!origin) return callback(null, true)
+        const clean = origin.replace(/\/+$/, '')
+        const isAllowed =
+          allowedOrigins.some((o) => o.replace(/\/+$/, '') === clean) ||
+          clean.includes('localhost') ||
+          clean.includes('127.0.0.1') ||
+          clean.endsWith('.vercel.app')
+        callback(null, isAllowed)
+      },
       methods: ['GET', 'POST'],
       credentials: true
     },
