@@ -32,4 +32,6 @@ Thumbs.db
 # Database files — SQLite only (PostgreSQL lives in Render's cloud)
 *.sqlite
 *.sqlite-journal
+*.db
 prisma/dev.db
+backend/prisma/dev.db
