@@ -7,7 +7,7 @@
     "build": "prisma generate --schema=./prisma/schema.prisma && tsc",
     "start": "node dist/index.js",
     "render:build": "prisma generate --schema=./prisma/schema.pg.prisma && tsc",
-    "render:start": "prisma migrate deploy --schema=./prisma/schema.pg.prisma && node dist/index.js",
+    "render:start": "prisma db push --schema=./prisma/schema.pg.prisma --accept-data-loss && node dist/index.js",
     "db:generate": "prisma generate --schema=./prisma/schema.prisma",
     "db:migrate": "prisma migrate dev --schema=./prisma/schema.prisma",
     "db:push": "prisma db push --schema=./prisma/schema.prisma",
